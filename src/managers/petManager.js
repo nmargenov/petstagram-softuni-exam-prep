@@ -2,6 +2,10 @@ const Pet = require("../models/Pet");
 
 const pattern = /^https?:\/\//;
 
+function getAllPets(){
+    return Pet.find().populate('owner');
+}
+
 function createPet(name, imageUrl, age, description, location, owner) {
     if (!pattern.test(imageUrl)) {
         throw new Error('Invalid image URL!');
@@ -21,4 +25,5 @@ function createPet(name, imageUrl, age, description, location, owner) {
 
 module.exports = {
     createPet,
+    getAllPets
 }

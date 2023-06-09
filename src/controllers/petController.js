@@ -1,11 +1,13 @@
-const { createPet } = require('../managers/petManager');
+const { createPet, getAllPets } = require('../managers/petManager');
 const { mustBeAuth } = require('../middlewares/authMiddleware');
 const { getErrorMessage } = require('../utils/errorHelper');
 
 const router = require('express').Router();
 
 router.get('/catalog',async(req,res)=>{
-    res.status(302).render('pets/catalog');
+    const pets = await getAllPets().lean();
+    const hasPets = pets.length>0;
+    res.status(302).render('pets/catalog',{hasPets,pets});
 });
 
 router.get('/addPhoto',mustBeAuth,(req,res)=>{
