@@ -1,4 +1,4 @@
-const { register } = require('../managers/userManager');
+const { register, login } = require('../managers/userManager');
 const { getErrorMessage } = require('../utils/errorHelper');
 
 const router = require('express').Router();
@@ -6,6 +6,21 @@ const router = require('express').Router();
 router.get('/login', (req, res) => {
     res.status(302).render('users/login');
 });
+
+router.post('/login',async(req,res)=>{
+    const username = req.body.username.toLowerCase().trim();
+    const password = req.body.password.trim();
+
+    try{
+        const user = await login(username,password);
+        console.log(user);
+        res.redirect('/');
+    }
+    catch(err){
+        const error = getErrorMessage(err);
+        res.render('users/login',{error,username});
+    }
+})
 
 router.get('/register', (req, res) => {
     res.status(302).render('users/register');

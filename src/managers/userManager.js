@@ -2,6 +2,22 @@ const bcrypt = require('bcrypt');
 
 const User = require("../models/User");
 
+async function login(username,password){
+    const user = await User.findOne({username});
+
+    if(!user){
+        throw new Error("Username or password don't match!");
+    }
+
+    const isValidPassword = await bcrypt.compare(password,user.password);
+
+    if(!isValidPassword){
+        throw new Error("Username or password don't match!");
+    }
+
+    return user;
+}
+
 async function register(username,email,password,rePassword){
     const existingUsername = await User.findOne({username});
     if(existingUsername){
@@ -35,5 +51,6 @@ async function register(username,email,password,rePassword){
 }
 
 module.exports = {
-    register
+    register,
+    login
 }
