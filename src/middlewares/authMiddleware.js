@@ -10,6 +10,7 @@ exports.auth = async(req,res,next)=>{
 
             req.user = decodedToken;
             res.locals.isLogged = true;
+            res.locals.user = decodedToken;
 
             next();
         }catch(err){
