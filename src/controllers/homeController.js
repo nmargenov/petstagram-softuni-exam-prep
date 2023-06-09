@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 router.get(['/','/index'],(req,res)=>{
-    res.send('Server is working properly!');
+    res.status(302).render('home');
 });
 
 module.exports = router;
