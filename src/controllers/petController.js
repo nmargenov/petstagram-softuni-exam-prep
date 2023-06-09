@@ -1,4 +1,4 @@
-const { createPet, getAllPets } = require('../managers/petManager');
+const { createPet, getAllPets, getPetById } = require('../managers/petManager');
 const { mustBeAuth } = require('../middlewares/authMiddleware');
 const { getErrorMessage } = require('../utils/errorHelper');
 
@@ -32,6 +32,20 @@ router.post('/addPhoto',mustBeAuth,async(req,res)=>{
     catch(err){
         const error = getErrorMessage(err);
         res.render('pets/create',{error,name,age,description,location,imageUrl})
+    }
+});
+
+router.get('/:petId/details',async(req,res)=>{
+    const petId = req.params.petId;
+    try{
+        const pet = await getPetById(petId).lean();
+        if(!pet){
+            throw new Error();
+        }
+        console.log(pet);
+        res.status(302).render('pets/details',{pet});
+    }catch(err){
+        res.status(404).render('404');
     }
 });
 

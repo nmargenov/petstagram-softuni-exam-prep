@@ -25,21 +25,21 @@
                             <!-- Link to User Profile Details Page -->
                             <p>
                                 <!-- User's username -->
-                                MayaM
+                                {{pet.owner.username}}
                             </p>
                             <!-- photo's location -->
-                            <span>Bansko, Bulgaria</span>
+                            <span>{{pet.location}}</span>
 
                             <!-- IF the viewer is the creator of the photo -->
                             <div class="edit-delete-btns">
 
                                 <!-- Edit Pet Photo -->
-                                <a href="#">
+                                <a href="/pets/{{_id}}/edit">
                                     <img class="edit-img" src="/static/images/edit-pen-icon-6.jpg" alt="edit button">
                                 </a>
 
                                 <!--Delete Pet Photo -->
-                                <a href="#">
+                                <a href="/pets/{{_id}}/delete">
                                     <img class="bin-img" src="/static/images/icon-remove-22.jpg" alt="bin button">
                                 </a>
                             </div>
@@ -52,7 +52,7 @@
                 <!-- Start Pet Photo -->
                 <div class="imgBx">
                     <!-- Pet Photo -->
-                    <img src="/static/images/axolotl.jpeg" alt="post" class="cover">
+                    <img src="{{pet.imageUrl}}" alt="post" class="cover">
                 </div>
 
 
@@ -60,14 +60,14 @@
                 <div class="bottom">
 
                     <p class="message">
-                        <b class="petDescription">This is my pet!</b>
+                        <b class="petDescription">{{pet.description}}</b>
                     </p>
 
 
                     <!-- Photo description -->
                     <div class="pet-details">
-                        <p class="petName">Name: Sal</p>
-                        <p class="petAge">Age: 4</p>
+                        <p class="petName">Name: {{pet.name}}</p>
+                        <p class="petAge">Age: {{pet.age}}</p>
                     </div>
                     <div class="comments">
                         <div class="comments-top">

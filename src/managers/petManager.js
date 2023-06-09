@@ -23,7 +23,12 @@ function createPet(name, imageUrl, age, description, location, owner) {
     return Pet.create(pet);
 }
 
+function getPetById(petId){
+    return Pet.findById(petId).populate('owner');
+}
+
 module.exports = {
     createPet,
-    getAllPets
+    getAllPets,
+    getPetById
 }
