@@ -37,13 +37,15 @@ router.post('/addPhoto',mustBeAuth,async(req,res)=>{
 
 router.get('/:petId/details',async(req,res)=>{
     const petId = req.params.petId;
+    const loggedUser = req.user?._id;
     try{
         const pet = await getPetById(petId).lean();
         if(!pet){
             throw new Error();
         }
-        console.log(pet);
-        res.status(302).render('pets/details',{pet});
+        const isOwner = loggedUser == pet.owner._id;
+        const canComment = !isOwner && loggedUser;
+        res.status(302).render('pets/details',{pet,isOwner,canComment});
     }catch(err){
         res.status(404).render('404');
     }
