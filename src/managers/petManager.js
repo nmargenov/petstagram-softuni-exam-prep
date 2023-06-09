@@ -24,11 +24,18 @@ function createPet(name, imageUrl, age, description, location, owner) {
 }
 
 function getPetById(petId){
-    return Pet.findById(petId).populate('owner');
+    return Pet.findById(petId).populate('owner').populate('commentsList').populate({path:'commentsList.userID',model:'User'});
 }
+
+function writeComment(petId,userId,comment){
+    return Pet.findByIdAndUpdate(petId,{$push:{commentsList:{userID:userId,comment}}});
+}
+
+
 
 module.exports = {
     createPet,
     getAllPets,
-    getPetById
+    getPetById,
+    writeComment,
 }

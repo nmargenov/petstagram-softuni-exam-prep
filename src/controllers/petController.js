@@ -1,4 +1,4 @@
-const { createPet, getAllPets, getPetById } = require('../managers/petManager');
+const { createPet, getAllPets, getPetById, writeComment, getCommentsForPost } = require('../managers/petManager');
 const { mustBeAuth } = require('../middlewares/authMiddleware');
 const { getErrorMessage } = require('../utils/errorHelper');
 
@@ -43,10 +43,31 @@ router.get('/:petId/details',async(req,res)=>{
         if(!pet){
             throw new Error();
         }
+        const comments = pet.commentsList;
+        const hasComments = comments.length>0;
         const isOwner = loggedUser == pet.owner._id;
         const canComment = !isOwner && loggedUser;
-        res.status(302).render('pets/details',{pet,isOwner,canComment});
+        res.status(302).render('pets/details',{pet,isOwner,canComment,hasComments,comments});
     }catch(err){
+        console.log(err);
+        res.status(404).render('404');
+    }
+});
+
+router.post('/:petId/details',mustBeAuth,async(req,res)=>{
+    const comment = req.body.comment?.trim();
+    const petId = req.params.petId;
+    const loggedUser = req.user._id;
+
+    try{
+        const pet = await getPetById(petId);
+        if(pet.owner._id == loggedUser){
+            throw new Error();
+        }
+        const newComment = await writeComment(petId,loggedUser,comment);
+        res.redirect(`/pets/${petId}/details`);
+    }catch(err){
+        console.log(err);
         res.status(404).render('404');
     }
 });

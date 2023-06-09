@@ -70,8 +70,10 @@
                         <p class="petName">Name: {{pet.name}}</p>
                         <p class="petAge">Age: {{pet.age}}</p>
                     </div>
+                    {{#if hasComments}}
                     <div class="comments">
                         <div class="comments-top">
+                            {{#each comments}}
                             <div class="userDetails">
                                 <div class="comment-data">
                                     <div class="profilepic">
@@ -84,47 +86,20 @@
                                     </div>
 
                                     <!--User's username-->
-                                    <p><b>StevIvanov</b>- OMG where can i get one</p>
+                                    <p><b>{{userID.username}}</b>- {{comment}}</p>
                                 </div>
                             </div>
-                            <div class="userDetails">
-                                <div class="comment-data">
-                                    <div class="profilepic">
-                                        <div class="profile_img">
-                                            <div class="image">
-                                                <!-- User Profile Image -->
-                                                <img src="/static/images/person.png" alt="img8">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!--User's username-->
-                                    <p><b>StevIvanov</b>- OMG where can i get one</p>
-                                </div>
-                            </div>
-                            <div class="userDetails">
-                                <div class="comment-data">
-                                    <div class="profilepic">
-                                        <div class="profile_img">
-                                            <div class="image">
-                                                <!-- User Profile Image -->
-                                                <img src="/static/images/person.png" alt="img8">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!--User's username-->
-                                    <p><b>StevIvanov</b>- OMG where can i get one</p>
-                                </div>
-                            </div>
+                           {{/each}}
+                            
                         </div>
                     </div>
+                    {{/if}}
                 </div>
                 {{#if canComment}}
                 <div class="addComments">
                     <!-- Start Add Comments Form -->
-                    <form method="#" action="#">
-                        <textarea id="comment-textarea" name="" cols="40" rows="10"
+                    <form method="POST">
+                        <textarea id="comment-textarea" name="comment" cols="40" rows="10"
                             placeholder="Add comment..."></textarea>
                         <!-- Post Comments Button -->
                         <button type="submit">Post</button>
