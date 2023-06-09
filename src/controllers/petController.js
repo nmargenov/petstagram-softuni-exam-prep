@@ -1,4 +1,4 @@
-const { createPet, getAllPets, getPetById, writeComment, getCommentsForPost, editPet } = require('../managers/petManager');
+const { createPet, getAllPets, getPetById, writeComment, getCommentsForPost, editPet, deletePetById } = require('../managers/petManager');
 const { mustBeAuth } = require('../middlewares/authMiddleware');
 const { getErrorMessage } = require('../utils/errorHelper');
 
@@ -127,4 +127,21 @@ router.post('/:petId/edit',mustBeAuth,async(req,res)=>{
     }
 });
 
+router.get('/:petId/delete',mustBeAuth,async(req,res)=>{
+    const petId = req.params.petId;
+    const loggedUser = req.user._id;
+    try{
+        const pet = await getPetById(petId);
+        if(!pet){
+            throw new Error();
+        }
+        if(loggedUser != pet.owner._id){
+            throw new Error();
+        }
+        await deletePetById(petId);
+        res.redirect('/pets/catalog');
+    }catch(err){
+        res.status(404).render('404');
+    }
+});
 module.exports = router;

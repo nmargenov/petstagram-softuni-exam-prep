@@ -47,6 +47,9 @@ function editPet(petId,name,imageUrl,age,description,location){
     return Pet.findByIdAndUpdate(petId,pet,{runValidators:true});
 }
 
+function deletePetById(petId){
+    return Pet.findByIdAndDelete(petId);
+}
 
 
 module.exports = {
@@ -54,5 +57,6 @@ module.exports = {
     getAllPets,
     getPetById,
     writeComment,
-    editPet
+    editPet,
+    deletePetById
 }
