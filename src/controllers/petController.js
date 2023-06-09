@@ -1,4 +1,4 @@
-const { createPet, getAllPets, getPetById, writeComment, getCommentsForPost } = require('../managers/petManager');
+const { createPet, getAllPets, getPetById, writeComment, getCommentsForPost, editPet } = require('../managers/petManager');
 const { mustBeAuth } = require('../middlewares/authMiddleware');
 const { getErrorMessage } = require('../utils/errorHelper');
 
@@ -69,6 +69,61 @@ router.post('/:petId/details',mustBeAuth,async(req,res)=>{
     }catch(err){
         console.log(err);
         res.status(404).render('404');
+    }
+});
+
+router.get('/:petId/edit',mustBeAuth,async(req,res)=>{
+    const petId = req.params.petId;
+    const loggedUser = req.user._id;
+    try{
+        const pet = await getPetById(petId).lean();
+        if(!pet){
+            throw new Error();
+        }
+        if(loggedUser!=pet.owner._id){
+            throw new Error();
+        }
+
+        res.status(302).render('pets/edit',{pet});
+    }catch(err){
+        res.status(404).render('404');
+    }
+});
+
+router.post('/:petId/edit',mustBeAuth,async(req,res)=>{
+    const petId = req.params.petId;
+    const loggedUser = req.user._id;
+    
+    const name = req.body.name?.trim();
+    const age = req.body.age?.trim();
+    const description = req.body.description?.trim();
+    const location = req.body.location?.trim();
+    const imageUrl = req.body.imageUrl?.trim();
+
+    const pet = {
+        name,
+        age,
+        description,
+        location,
+        imageUrl
+    }
+
+    try{
+        const pet = await getPetById(petId).lean();
+        if(!pet){
+            throw new Error();
+        }
+        if(loggedUser!=pet.owner._id){
+            throw new Error();
+        }
+
+        await editPet(petId,name,imageUrl,age,description,location);
+
+        res.redirect(`/pets/${petId}/details`);
+
+    }catch(err){
+        const error = getErrorMessage(err);
+        res.status(404).render('pets/edit',{error,pet});
     }
 });
 

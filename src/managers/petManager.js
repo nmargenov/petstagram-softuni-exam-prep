@@ -31,6 +31,22 @@ function writeComment(petId,userId,comment){
     return Pet.findByIdAndUpdate(petId,{$push:{commentsList:{userID:userId,comment}}});
 }
 
+function editPet(petId,name,imageUrl,age,description,location){
+    if (!pattern.test(imageUrl)) {
+        throw new Error('Invalid image URL!');
+    }
+
+    const pet = {
+        name,
+        imageUrl,
+        age,
+        description,
+        location
+    }
+
+    return Pet.findByIdAndUpdate(petId,pet,{runValidators:true});
+}
+
 
 
 module.exports = {
@@ -38,4 +54,5 @@ module.exports = {
     getAllPets,
     getPetById,
     writeComment,
+    editPet
 }
